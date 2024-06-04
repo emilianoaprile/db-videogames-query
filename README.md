@@ -101,12 +101,12 @@
     ```
 
 
-2- Contare quante recensioni ha ricevuto ogni videogioco (del videogioco vogliamo solo l'ID) (500)
-
-SELECT videogame_id, COUNT(*) AS total_videogames 
-FROM `reviews`
-GROUP BY videogame_id;
-
+2. **Contare quante recensioni ha ricevuto ogni videogioco (del videogioco vogliamo solo l'ID) (500)**
+    ```sql
+    SELECT videogame_id, COUNT(*) AS total_videogames 
+    FROM `reviews`
+    GROUP BY videogame_id;
+    ```
 
 3- Contare quanti videogiochi hanno ciascuna classificazione PEGI (della classificazione PEGI vogliamo solo l'ID) (13)
 
@@ -177,7 +177,19 @@ WHERE YEAR(v.release_date) > 2020;
 
 
 5- Selezionare i premi ricevuti da ogni software house per i videogiochi che ha prodotto (55)
+
+SELECT sh.name, v.name, a.name, av.year 
+FROM `awards` AS a
+INNER JOIN award_videogame AS av ON a.id = av.award_id
+INNER JOIN `videogames` AS v ON v.id = av.award_id
+INNER JOIN `software_houses` AS sh ON v.software_house_id = sh.id;
+
+
 6- Selezionare categorie e classificazioni PEGI dei videogiochi che hanno ricevuto recensioni da 4 e 5 stelle, mostrandole una sola volta (3363)
+
+
+
+
 7- Selezionare quali giochi erano presenti nei tornei nei quali hanno partecipato i giocatori il cui nome inizia per 'S' (474)
 8- Selezionare le città in cui è stato giocato il gioco dell'anno del 2018 (36)
 9- Selezionare i giocatori che hanno giocato al gioco più atteso del 2018 in un torneo del 2019 (991)
