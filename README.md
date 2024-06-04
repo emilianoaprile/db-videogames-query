@@ -102,19 +102,80 @@
 
 
 2- Contare quante recensioni ha ricevuto ogni videogioco (del videogioco vogliamo solo l'ID) (500)
+
+SELECT videogame_id, COUNT(*) AS total_videogames 
+FROM `reviews`
+GROUP BY videogame_id;
+
+
 3- Contare quanti videogiochi hanno ciascuna classificazione PEGI (della classificazione PEGI vogliamo solo l'ID) (13)
+
+SELECT pl.id, COUNT(v.id) AS total_videogames
+FROM `pegi_labels` AS pl
+INNER JOIN `pegi_label_videogame` AS pl_v ON pl.id = pl_v.id
+INNER JOIN `videogames` AS v ON pl_v.videogame_id = v.id
+GROUP BY pl.id;
+
+
 4- Mostrare il numero di videogiochi rilasciati ogni anno (11)
+
+SELECT YEAR(v.release_date) AS release_year, COUNT(v.id) AS total_videogames
+FROM `videogames` AS v
+GROUP BY release_year;
+
+
 5- Contare quanti videogiochi sono disponbiili per ciascun device (del device vogliamo solo l'ID) (7)
+
+SELECT d.id, COUNT(v.id) AS total_videogames
+FROM `devices` AS d
+INNER JOIN `device_videogame` AS dv ON d.id = dv.id
+INNER JOIN `videogames` AS v ON dv.videogame_id = v.id
+GROUP BY d.id;
+
+
 6- Ordinare i videogame in base alla media delle recensioni (del videogioco vogliamo solo l'ID) (500)
 
-
+SELECT v.id, AVG(r.rating) AS avg_rating
+FROM `videogames` AS v
+INNER JOIN `reviews` AS r ON v.id = r.videogame_id
+GROUP BY v.id
+ORDER BY avg_rating DESC;
 
 
 JOIN
+
 1- Selezionare i dati di tutti giocatori che hanno scritto almeno una recensione, mostrandoli una sola volta (996)
+
+SELECT DISTINCT p.*
+FROM `players` AS p
+INNER JOIN `reviews` as r ON p.id = r.player_id;
+
+
 2- Sezionare tutti i videogame dei tornei tenuti nel 2016, mostrandoli una sola volta (226)
+
+SELECT DISTINCT v.*
+FROM `videogames` AS v
+INNER JOIN `tournament_videogame` AS tv ON v.id = tv.videogame_id
+INNER JOIN `tournaments` AS t ON tv.tournament_id = t.id
+WHERE t.year = '2016';
+
+
 3- Mostrare le categorie di ogni videogioco (1718)
+
+SELECT c.name 
+FROM `videogames` AS v
+INNER JOIN `category_videogame` AS cv ON v.id = cv.videogame_id
+INNER JOIN `categories` AS c ON cv.category_id = c.id;
+
+
 4- Selezionare i dati di tutte le software house che hanno rilasciato almeno un gioco dopo il 2020, mostrandoli una sola volta (6)
+
+SELECT * 
+FROM `software_houses` as sh
+INNER JOIN `videogames` as v ON sh.id = v.software_house_id
+WHERE YEAR(v.release_date) > 2020;
+
+
 5- Selezionare i premi ricevuti da ogni software house per i videogiochi che ha prodotto (55)
 6- Selezionare categorie e classificazioni PEGI dei videogiochi che hanno ricevuto recensioni da 4 e 5 stelle, mostrandole una sola volta (3363)
 7- Selezionare quali giochi erano presenti nei tornei nei quali hanno partecipato i giocatori il cui nome inizia per 'S' (474)
